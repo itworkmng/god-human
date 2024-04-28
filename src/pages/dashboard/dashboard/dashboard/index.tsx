@@ -29,18 +29,20 @@ const DashboardSection: FC = () => {
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <DashboardCard
           label="Нийт Захиалагч"
           amount={data?.clients}
           percent={0}
           loading={loading}
+          href="/dashboard/client"
         />
         <DashboardCard
           label="Нийт захиалга"
           amount={data?.order}
           percent={0}
           loading={loading}
+          href="/dashboard/orders"
         />
         {user?.role == ROLE.human && (
           <DashboardCard

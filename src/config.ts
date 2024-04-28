@@ -79,23 +79,23 @@ export const BANK_ARRAY = Object.freeze([
   },
   {
     value: "khaan",
-    label: "Khan bank",
+    label: "Хаан банк",
   },
   {
     value: "golomt",
-    label: "Golomt bank",
+    label: "Голомт Банк",
   },
   {
     value: "khas",
-    label: "Xac bank",
+    label: "Хас банк",
   },
   {
     value: "state",
-    label: "State bank",
+    label: "Төрийн банк",
   },
   {
     value: "capitron",
-    label: "Capitron bank",
+    label: "Капитрон банк",
   },
 ]);
 

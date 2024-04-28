@@ -7,7 +7,7 @@ namespace file {
     const body = new FormData();
     body.append("file", file.originFileObj);
 
-    return http.post<FileType>("global/file/upload", {
+    return http.post<FileType>("client/upload", {
       body,
       hasAuth: true,
     });
@@ -33,7 +33,7 @@ namespace file {
     if (!val) {
       return "";
     }
-    return `${import.meta.env.VITE_FILE_GET_URL}${val}`;
+    return `${import.meta.env.VITE_FILE_GET_URL}/${val}`;
   };
 
   export const getFileName = (val: string) => {

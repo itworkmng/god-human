@@ -1,6 +1,7 @@
 import { decryptWithAES, encryptWithAES } from "utils/parse";
 import http from "..";
 import { LoginData, LoginResponse, Admin } from "./type";
+import { SuccessResponse } from "types";
 const tokenKey = "app.token";
 const userKey = "app.user";
 namespace auth {
@@ -31,6 +32,15 @@ namespace auth {
     }
   };
 
+  export const update = (id: number, body: Admin) =>
+    http.put<SuccessResponse>(`user/${id}`, {
+      hasAuth: true,
+      body,
+    });
+  export const change_password = (id: number) =>
+    http.post<SuccessResponse>(`user/password/${id}`, {
+      hasAuth: true,
+    });
   export const getRememberUser = () => {
     const userData = localStorage.getItem(userKey);
     if (userData) {

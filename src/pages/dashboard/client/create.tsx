@@ -1,30 +1,71 @@
-import {
-  ProFormField,
-  ProFormSelect,
-  ProFormSwitch,
-} from "@ant-design/pro-form";
+import { UploadOutlined } from "@ant-design/icons";
+import { ProFormField, ProFormSwitch } from "@ant-design/pro-form";
 import { useRequest } from "ahooks";
-import { Divider, Form, Tabs, notification } from "antd";
-import { SectionContainer, SectionField } from "components/index";
+import {
+  Button,
+  Divider,
+  Form,
+  Tabs,
+  Upload,
+  UploadFile,
+  UploadProps,
+  notification,
+} from "antd";
+import {
+  SectionContainer,
+  SectionField,
+  UploadDraggerButton,
+} from "components/index";
 import { IModalForm } from "components/modal";
 import { useAuthContext } from "context/auth";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import staff from "service/client";
 import { IClient } from "service/client/type";
 import company from "service/company";
 import { ActionComponentProps } from "types";
 import { registrationNumberValidation, tokenDecode } from "utils/index";
+import ImgCrop from "antd-img-crop";
+import { GetProp } from "antd/lib";
+import file from "service/file";
+type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
 const Create: FC<ActionComponentProps<IClient>> = ({
   open,
   onCancel,
   onFinish,
 }) => {
+  const [fileList, setFileList] = useState<any[]>([]);
   const [user] = useAuthContext();
   const [form] = Form.useForm();
   const { runAsync } = useRequest(staff.create, {
     manual: true,
   });
+  const { data: uploadFile, run: runUpload } = useRequest(file.upload, {
+    manual: true,
+  });
+  const onChangeLogo: UploadProps["onChange"] = ({ fileList: newFileList }) => {
+    runUpload({ file: newFileList[0] });
+    setFileList(newFileList);
+  };
+  const removePhoto = () => {
+    form.setFieldValue("photo", "empty.png");
+    setFileList([]);
+  };
+  const onPreview = async (file: UploadFile) => {
+    let src = file.url as string;
+    if (!src) {
+      src = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj as FileType);
+        reader.onload = () => resolve(reader.result as string);
+      });
+    }
+    const image = new Image();
+    image.src = src;
+    const imgWindow = window.open(src);
+    imgWindow?.document.write(image.outerHTML);
+  };
+
   const [currentRegister, setCurrentRegister] = useState("");
   const { runAsync: runCompany } = useRequest(company.info, {
     manual: true,
@@ -64,6 +105,7 @@ const Create: FC<ActionComponentProps<IClient>> = ({
         onRequest={async (values: IClient) => {
           await runAsync({
             ...values,
+            photo: uploadFile?.photo || "empty.png",
             userId: user.user?.checker_id
               ? user.user?.checker_id
               : tokenDecode()?.id || 0,
@@ -217,7 +259,6 @@ const Create: FC<ActionComponentProps<IClient>> = ({
                   }
                 />
               </div>
-
               <SectionField
                 label="Албан тушаал *"
                 children={
@@ -288,6 +329,24 @@ const Create: FC<ActionComponentProps<IClient>> = ({
                   }
                 />
               </div>
+              <SectionField
+                label="Байгууллагын лого /Заавал биш/"
+                children={
+                  <ImgCrop rotationSlider>
+                    <Upload
+                      listType="picture-card"
+                      fileList={fileList}
+                      onChange={(e) => onChangeLogo(e)}
+                      maxCount={1}
+                      onRemove={() => {
+                        removePhoto();
+                      }}
+                      onPreview={onPreview}>
+                      {fileList.length < 1 && "+ Лого"}
+                    </Upload>
+                  </ImgCrop>
+                }
+              />
               <SectionField
                 label="И-мэйл /Заавал биш/"
                 children={

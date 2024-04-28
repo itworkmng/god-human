@@ -3,7 +3,6 @@ import { BsCash } from "react-icons/bs";
 import { MdDashboard } from "react-icons/md";
 import {
   Bell01,
-  CreditCardDown,
   List,
   MessageTextCircle02,
   Settings01,
@@ -55,6 +54,5 @@ export const menuDataRender: MenuDataItem[] = [
     icon: <Settings01 {...iconConfig} />,
     name: "Тохиргоо",
     path: "/dashboard/settings",
-    disabled: true,
   },
 ];

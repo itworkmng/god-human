@@ -1,6 +1,6 @@
 import { ProFormField, ProFormSwitch } from "@ant-design/pro-form";
 import { useRequest } from "ahooks";
-import { Divider, Form, Tabs } from "antd";
+import { Divider, Form } from "antd";
 import { SectionContainer, SectionField } from "components/index";
 import { IModalForm } from "components/modal";
 import { useAuthContext } from "context/auth";
@@ -8,7 +8,7 @@ import { FC, useEffect, useState } from "react";
 import staff from "service/client";
 import { IClient } from "service/client/type";
 import { ActionComponentProps } from "types";
-import { registrationNumberValidation, tokenDecode } from "utils/index";
+import { registrationNumberValidation } from "utils/index";
 
 const Update: FC<ActionComponentProps<IClient>> = ({
   open,
@@ -16,6 +16,7 @@ const Update: FC<ActionComponentProps<IClient>> = ({
   onFinish,
   detail,
 }) => {
+  const [fileList, setFileList] = useState<any[]>([]);
   const [user] = useAuthContext();
   const [form] = Form.useForm();
   const { runAsync } = useRequest(staff.update, {
@@ -30,7 +31,7 @@ const Update: FC<ActionComponentProps<IClient>> = ({
     <>
       <IModalForm
         open={open}
-        title="Үүсгэх"
+        title="Мэдээллийг шинэчлэх"
         form={form}
         autoFocusFirstInput
         modalProps={{
@@ -39,7 +40,9 @@ const Update: FC<ActionComponentProps<IClient>> = ({
         }}
         submitTimeout={2000}
         onRequest={async (values: IClient) => {
-          await runAsync(detail?.id || 0, values);
+          await runAsync(detail?.id || 0, {
+            ...values,
+          });
         }}
         onSuccess={onFinish}>
         {tab == "private" && (

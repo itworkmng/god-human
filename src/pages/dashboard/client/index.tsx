@@ -1,5 +1,5 @@
 import { useRequest } from "ahooks";
-import { Button, Tag, notification } from "antd";
+import { Button, Image, Tag, notification } from "antd";
 import { ITable } from "components/table";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
@@ -11,6 +11,7 @@ import { UnlockOutlined } from "@ant-design/icons";
 import { tokenDecode } from "utils/index";
 import { ERROR_MESSAGE, IERROR } from "utils/typdef";
 import { useAuthContext } from "context/auth";
+import file from "service/file";
 
 const ClientPage = () => {
   const [{ user }] = useAuthContext();
@@ -101,6 +102,11 @@ const ClientPage = () => {
             width: 300,
             dataIndex: "last_name",
             title: "Овог",
+          },
+          {
+            dataIndex: "photo",
+            title: "Зураг",
+            render: (_, record) => <Image src={file.fileToUrl(record.photo)} />,
           },
           {
             width: 300,
