@@ -1,21 +1,16 @@
-import { UploadOutlined } from "@ant-design/icons";
 import { ProFormField, ProFormSwitch } from "@ant-design/pro-form";
 import { useRequest } from "ahooks";
 import {
-  Button,
   Divider,
+  Flex,
   Form,
+  Image,
   Tabs,
   Upload,
-  UploadFile,
   UploadProps,
   notification,
 } from "antd";
-import {
-  SectionContainer,
-  SectionField,
-  UploadDraggerButton,
-} from "components/index";
+import { SectionContainer, SectionField } from "components/index";
 import { IModalForm } from "components/modal";
 import { useAuthContext } from "context/auth";
 import { FC, useEffect, useState } from "react";
@@ -23,68 +18,53 @@ import staff from "service/client";
 import { IClient } from "service/client/type";
 import company from "service/company";
 import { ActionComponentProps } from "types";
-import { registrationNumberValidation, tokenDecode } from "utils/index";
-import ImgCrop from "antd-img-crop";
-import { GetProp } from "antd/lib";
-import file from "service/file";
-type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
+import {
+  imageUrl,
+  registrationNumberValidation,
+  tokenDecode,
+  uploadHandler,
+} from "utils/index";
 
 const Create: FC<ActionComponentProps<IClient>> = ({
   open,
   onCancel,
   onFinish,
 }) => {
-  const [fileList, setFileList] = useState<any[]>([]);
+  const [file_id, setFileId] = useState<string>("");
+  const [uploading, setUploading] = useState(false);
   const [user] = useAuthContext();
   const [form] = Form.useForm();
   const { runAsync } = useRequest(staff.create, {
     manual: true,
   });
-  const { data: uploadFile, run: runUpload } = useRequest(file.upload, {
-    manual: true,
-  });
-  const onChangeLogo: UploadProps["onChange"] = ({ fileList: newFileList }) => {
-    runUpload({ file: newFileList[0] });
-    setFileList(newFileList);
+  const onChangeLogo: UploadProps["onChange"] = async ({ file: newFile }) => {
+    setUploading(true);
+    const result = await uploadHandler(newFile.originFileObj);
+    setUploading(false);
+    setFileId(result?.uuid || "");
+
+    form.setFieldValue("photo", result?.uuid);
   };
   const removePhoto = () => {
     form.setFieldValue("photo", "empty.png");
-    setFileList([]);
-  };
-  const onPreview = async (file: UploadFile) => {
-    let src = file.url as string;
-    if (!src) {
-      src = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj as FileType);
-        reader.onload = () => resolve(reader.result as string);
-      });
-    }
-    const image = new Image();
-    image.src = src;
-    const imgWindow = window.open(src);
-    imgWindow?.document.write(image.outerHTML);
+    setFileId("");
   };
 
   const [currentRegister, setCurrentRegister] = useState("");
-  const { runAsync: runCompany } = useRequest(company.info, {
-    manual: true,
-    onSuccess: () => {
-      notification.success({
-        message: "Company find Амжилттай",
-      });
-    },
-  });
 
-  const handleCompanyCheck = () => {
-    const newRegister = form.getFieldValue("company_register").toString();
-    if (
-      (currentRegister.length != 7 && newRegister.length == 7) ||
-      (currentRegister != newRegister && newRegister.length == 7)
-    ) {
-      setCurrentRegister(newRegister);
-      runCompany(newRegister);
+  const fetchCompanyInfo = async () => {
+    const register = form.getFieldValue("company_register");
+    if (register.length == 7) {
+      if (currentRegister != register) {
+        try {
+          const companyData = await company.info(register);
+          form.setFieldValue("company_name", companyData.name);
+        } catch (error) {}
+      }
+    } else {
+      form.resetFields(["company_name"]);
     }
+    setCurrentRegister(register);
   };
   const [tab, setTab] = useState<"private" | "statement">("statement");
   return (
@@ -93,10 +73,10 @@ const Create: FC<ActionComponentProps<IClient>> = ({
         open={open}
         title="Үүсгэх"
         form={form}
-        autoFocusFirstInput
-        onChange={(e) => {
-          handleCompanyCheck();
+        onChange={async () => {
+          await fetchCompanyInfo();
         }}
+        autoFocusFirstInput
         modalProps={{
           destroyOnClose: true,
           onCancel: onCancel,
@@ -105,7 +85,7 @@ const Create: FC<ActionComponentProps<IClient>> = ({
         onRequest={async (values: IClient) => {
           await runAsync({
             ...values,
-            photo: uploadFile?.photo || "empty.png",
+            photo: file_id,
             userId: user.user?.checker_id
               ? user.user?.checker_id
               : tokenDecode()?.id || 0,
@@ -322,9 +302,8 @@ const Create: FC<ActionComponentProps<IClient>> = ({
                   children={
                     <ProFormField
                       disabled
-                      placeholder={"АЙТИ-ВОРК ХХК"}
+                      placeholder={""}
                       name={"company_name"}
-                      initialValue={"АЙТИ ВОРК"}
                     />
                   }
                 />
@@ -332,19 +311,25 @@ const Create: FC<ActionComponentProps<IClient>> = ({
               <SectionField
                 label="Байгууллагын лого /Заавал биш/"
                 children={
-                  <ImgCrop rotationSlider>
+                  <Flex gap={8} justify="flex-start" align="start">
+                    {file_id != "" && (
+                      <Image
+                        className=" h-[100px] w-[100px] rounded-full"
+                        src={imageUrl(file_id)}
+                      />
+                    )}
                     <Upload
-                      listType="picture-card"
-                      fileList={fileList}
+                      disabled={uploading}
+                      listType="picture-circle"
+                      fileList={[]}
                       onChange={(e) => onChangeLogo(e)}
                       maxCount={1}
                       onRemove={() => {
                         removePhoto();
-                      }}
-                      onPreview={onPreview}>
-                      {fileList.length < 1 && "+ Лого"}
+                      }}>
+                      {file_id == "" ? "+ Лого" : "Солих"}
                     </Upload>
-                  </ImgCrop>
+                  </Flex>
                 }
               />
               <SectionField

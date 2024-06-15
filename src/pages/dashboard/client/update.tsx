@@ -1,14 +1,20 @@
 import { ProFormField, ProFormSwitch } from "@ant-design/pro-form";
 import { useRequest } from "ahooks";
-import { Divider, Form } from "antd";
+import { Divider, Flex, Form, Image, Upload, notification } from "antd";
+import { UploadProps } from "antd/lib";
 import { SectionContainer, SectionField } from "components/index";
 import { IModalForm } from "components/modal";
 import { useAuthContext } from "context/auth";
 import { FC, useEffect, useState } from "react";
 import staff from "service/client";
 import { IClient } from "service/client/type";
+import company from "service/company";
 import { ActionComponentProps } from "types";
-import { registrationNumberValidation } from "utils/index";
+import {
+  imageUrl,
+  registrationNumberValidation,
+  uploadHandler,
+} from "utils/index";
 
 const Update: FC<ActionComponentProps<IClient>> = ({
   open,
@@ -16,17 +22,51 @@ const Update: FC<ActionComponentProps<IClient>> = ({
   onFinish,
   detail,
 }) => {
-  const [fileList, setFileList] = useState<any[]>([]);
+  const [uploading, setUploading] = useState(false);
   const [user] = useAuthContext();
   const [form] = Form.useForm();
   const { runAsync } = useRequest(staff.update, {
     manual: true,
   });
+  const [file_id, setFileId] = useState<string>("");
 
   const [tab, setTab] = useState<"private" | "statement">();
   useEffect(() => {
     detail?.company_name ? setTab("statement") : setTab("private");
+    setFileId(detail?.photo || "");
+    form.setFieldValue("company_name", detail?.company_name);
   }, [detail]);
+
+  const onChangeLogo: UploadProps["onChange"] = async ({ file: newFile }) => {
+    setUploading(true);
+    const result = await uploadHandler(newFile.originFileObj);
+    setUploading(false);
+    setFileId(result?.uuid || "");
+
+    form.setFieldValue("photo", result?.uuid);
+  };
+  const removePhoto = () => {
+    form.setFieldValue("photo", "empty.png");
+    setFileId("");
+  };
+
+  const [currentRegister, setCurrentRegister] = useState("");
+
+  const fetchCompanyInfo = async () => {
+    const register = form.getFieldValue("company_register");
+    if (register.length == 7) {
+      if (currentRegister != register) {
+        try {
+          const companyData = await company.info(register);
+          form.setFieldValue("company_name", companyData.name);
+        } catch (error) {}
+      }
+    } else {
+      form.resetFields(["company_name"]);
+    }
+    setCurrentRegister(register);
+  };
+
   return (
     <>
       <IModalForm
@@ -38,10 +78,14 @@ const Update: FC<ActionComponentProps<IClient>> = ({
           destroyOnClose: true,
           onCancel: onCancel,
         }}
+        onChange={async () => {
+          await fetchCompanyInfo();
+        }}
         submitTimeout={2000}
         onRequest={async (values: IClient) => {
           await runAsync(detail?.id || 0, {
             ...values,
+            photo: file_id != "" ? file_id : detail?.photo || "",
           });
         }}
         onSuccess={onFinish}>
@@ -80,6 +124,31 @@ const Update: FC<ActionComponentProps<IClient>> = ({
                     placeholder={"Баяраа"}
                     name={"first_name"}
                   />
+                }
+              />
+
+              <SectionField
+                label="Байгууллагын лого /Заавал биш/"
+                children={
+                  <Flex gap={8} justify="flex-start" align="start">
+                    {file_id != "" && (
+                      <Image
+                        className=" h-[100px] w-[100px] rounded-full"
+                        src={imageUrl(file_id)}
+                      />
+                    )}
+                    <Upload
+                      disabled={uploading}
+                      listType="picture-circle"
+                      fileList={[]}
+                      onChange={(e) => onChangeLogo(e)}
+                      maxCount={1}
+                      onRemove={() => {
+                        removePhoto();
+                      }}>
+                      {file_id == "" ? "+ Лого" : "Солих"}
+                    </Upload>
+                  </Flex>
                 }
               />
               <SectionField
@@ -257,14 +326,38 @@ const Update: FC<ActionComponentProps<IClient>> = ({
                   label="Нэр *"
                   children={
                     <ProFormField
-                      initialValue={detail?.company_name}
                       disabled
-                      placeholder={"АЙТИ-ВОРК ХХК"}
+                      placeholder={"Ж/н: АЙТИ-ВОРК ХХК"}
                       name={"company_name"}
                     />
                   }
                 />
               </div>
+
+              <SectionField
+                label="Байгууллагын лого /Заавал биш/"
+                children={
+                  <Flex gap={8} justify="flex-start" align="start">
+                    {file_id != "" && (
+                      <Image
+                        className=" h-[100px] w-[100px] rounded-full"
+                        src={imageUrl(file_id)}
+                      />
+                    )}
+                    <Upload
+                      disabled={uploading}
+                      listType="picture-circle"
+                      fileList={[]}
+                      onChange={(e) => onChangeLogo(e)}
+                      maxCount={1}
+                      onRemove={() => {
+                        removePhoto();
+                      }}>
+                      {file_id == "" ? "+ Лого" : "Солих"}
+                    </Upload>
+                  </Flex>
+                }
+              />
               <SectionField
                 label="И-мэйл /Заавал биш/"
                 children={

@@ -1,3 +1,4 @@
+import { uploadFile } from "@uploadcare/upload-client";
 import { DEGREES } from "config";
 import dayjs, { QUnitType } from "dayjs";
 import { HTMLAttributes } from "react";
@@ -5,9 +6,10 @@ import auth from "service/auth";
 import file from "service/file";
 import { jwtDecode } from "jwt-decode";
 import { FilterDeadline } from "types";
-import { E_BLANK, E_PAY_STATUS, ITOKEN } from "./typdef";
+import { E_BLANK, ITOKEN } from "./typdef";
 import { RegistrationLetters } from "./constants";
 import { Payment } from "service/order/type";
+const publicKey = import.meta.env.VITE_UPLOAD_CARE_PUBLIC_CARE;
 
 export const calculateTableRowSpan = (
   index: number,
@@ -326,7 +328,6 @@ export const getDeadlineByRangeDate = (fullDate?: string[]) => {
     dayjs(fullDate[0]).toDate(),
     "days"
   );
-  console.log(gapDays, "GAP DAYS");
 
   if (gapDays <= 1) return FilterDeadline.FullHours;
   if (gapDays <= 7) return FilterDeadline.Week;
@@ -430,4 +431,30 @@ export const registrationNumberValidation = (value: string) => {
     return "Регистрерт 8 тоо агуулсан байна";
 
   return null;
+};
+export const uploadHandler = async (file: any) => {
+  // logic
+  if (file) {
+    const result = await uploadFile(file, {
+      publicKey,
+      store: "auto",
+      metadata: {
+        subsystem: "js-client",
+        pet: "cat",
+      },
+    });
+    return result;
+  }
+  return;
+};
+export const imageUrlResize = (id: string, width: number, height: number) => {
+  return "https://ucarecdn.com/" + id + `/-/resize/${width}x${height}/`;
+};
+
+export const imageUrl = (id: string) => {
+  return "https://ucarecdn.com/" + id + "/";
+};
+
+export const imageUrlCrop = (id: string, width: number, height: number) => {
+  return "https://ucarecdn.com/" + id + `/-/crop/${width}x${height}/`;
 };

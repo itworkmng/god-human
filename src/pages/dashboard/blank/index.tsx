@@ -34,7 +34,6 @@ const BlankPage = () => {
           ...filter,
         }}
         onValuesChange={(curr) => {
-          console.log(curr);
           if (curr.full_date) {
             curr.deadline = undefined;
           }
@@ -93,8 +92,7 @@ const BlankPage = () => {
                     ? BLANK_STATUS.active.color
                     : BLANK_STATUS.inactive.color
                 }
-                className="rounded-full border-none"
-              >
+                className="rounded-full border-none">
                 •{" "}
                 {record.is_select
                   ? BLANK_STATUS.active.label

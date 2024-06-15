@@ -8,7 +8,7 @@ import { IClient } from "service/client/type";
 import Create from "./create";
 import Update from "./update";
 import { UnlockOutlined } from "@ant-design/icons";
-import { tokenDecode } from "utils/index";
+import { imageUrl, tokenDecode } from "utils/index";
 import { ERROR_MESSAGE, IERROR } from "utils/typdef";
 import { useAuthContext } from "context/auth";
 import file from "service/file";
@@ -106,7 +106,7 @@ const ClientPage = () => {
           {
             dataIndex: "photo",
             title: "Зураг",
-            render: (_, record) => <Image src={file.fileToUrl(record.photo)} />,
+            render: (_, record) => <Image src={imageUrl(record.photo)} />,
           },
           {
             width: 300,

@@ -17,15 +17,12 @@ const LeafletMap: FC<Props> = ({
   position,
   onPositionChange,
 }) => {
-  console.log(markers);
-
   return (
     <MapContainer
       center={CENTER_MAP}
       zoom={13}
       style={{ width: "100%", height: "100%" }}
-      scrollWheelZoom
-    >
+      scrollWheelZoom>
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
       {markers.map((marker) => (
         <Marker
@@ -42,8 +39,7 @@ const LeafletMap: FC<Props> = ({
               if (marker.onClick) marker.onClick();
             },
           }}
-          title={marker.name}
-        >
+          title={marker.name}>
           <Popup>{marker.customPopup ? marker.customPopup : marker.name}</Popup>
         </Marker>
       ))}
