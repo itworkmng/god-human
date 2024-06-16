@@ -28,6 +28,9 @@ const UpdatePrice: FC<ActionComponentProps<Order>> = ({
 
   const { run: run_update } = useRequest(order.update, {
     manual: true,
+    onSuccess: () => {
+      onCancel();
+    },
     onError: (err: any | IERROR) => {
       notification.error({
         message:

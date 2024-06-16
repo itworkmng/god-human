@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { useRequest } from "ahooks";
-import { Divider, Form, Input, Tag, notification } from "antd";
+import { Divider, Form, Tag, notification } from "antd";
 import { IModalForm } from "components/modal";
 import { Order, Payment } from "service/order/type";
 import { ActionComponentProps } from "types";
@@ -18,6 +18,9 @@ const UpdatePayment: FC<ActionComponentProps<Order>> = ({
 }) => {
   const { run, loading } = useRequest(payment.create, {
     manual: true,
+    onSuccess: () => {
+      onCancel();
+    },
     onError: (err) =>
       notification.error({
         message: err.message,

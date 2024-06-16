@@ -27,10 +27,16 @@ const Update: FC<ActionComponentProps<Order>> = ({
     onCancel();
   };
   const Payment = () => {
-    detail && setIsPayment({ status: true, detail });
+    if (detail) {
+      setIsPayment({ status: true, detail });
+      setisPrice(undefined);
+    }
   };
   const Price = () => {
-    detail && setisPrice({ status: true, detail });
+    if (detail) {
+      setisPrice({ status: true, detail });
+      setIsPayment(undefined);
+    }
   };
   return (
     <IModalForm
@@ -52,22 +58,18 @@ const Update: FC<ActionComponentProps<Order>> = ({
           Төлбөр төлөх
         </Button>
 
-        {isPrice && (
-          <UpdatePrice
-            onFinish={onFinish}
-            detail={isPrice && isPrice.detail}
-            open={isPrice ? isPrice.status : false}
-            onCancel={Clear}
-          />
-        )}
-        {isPayment && (
-          <UpdatePayment
-            onFinish={onFinish}
-            detail={isPayment && isPayment.detail}
-            open={isPayment ? isPayment.status : false}
-            onCancel={Clear}
-          />
-        )}
+        <UpdatePrice
+          onFinish={onFinish}
+          detail={isPrice && isPrice.detail}
+          open={isPrice ? true : false}
+          onCancel={Clear}
+        />
+        <UpdatePayment
+          onFinish={onFinish}
+          detail={isPayment && isPayment.detail}
+          open={isPayment ? true : false}
+          onCancel={Clear}
+        />
       </div>
     </IModalForm>
   );
