@@ -15,8 +15,7 @@ export const CreateButton = ({ ...rest }: PropsCreate) => {
       {...rest}
       className={`flex items-center   font-medium gap-1 ${rest.className}`}
       icon={<IoAddCircleOutline size={20} />}
-      type="primary"
-    >
+      type="primary">
       Үүсгэх
     </Button>
   );
@@ -28,8 +27,7 @@ export const ApproveButton = ({ ...rest }: ButtonProps) => {
       {...rest}
       className="flex items-center  font-medium gap-1"
       icon={<BiCheckCircle size={20} />}
-      type="primary"
-    >
+      type="primary">
       Approve
     </Button>
   );
@@ -41,8 +39,7 @@ export const DeleteButton = ({ ...rest }: ButtonProps) => {
         {...rest}
         color="red"
         className="text-red-500 flex gap-1 items-center font-medium px-1"
-        type="ghost"
-      >
+        type="text">
         <FiTrash2 size={20} />
       </Button>
     </Tooltip>
@@ -58,8 +55,7 @@ export const DetailButton = ({
       <Button
         {...rest}
         className="flex gap-1 items-center font-medium px-1"
-        type="ghost"
-      >
+        type="text">
         <AiOutlineEye size={20} className={color ? color : " text-gray-700"} />
       </Button>
     </Tooltip>
@@ -71,9 +67,8 @@ export const EditButton = ({ ...rest }: ButtonProps) => {
     <Tooltip title="Edit">
       <Button
         {...rest}
-        type="ghost"
-        className=" flex gap-1 items-center font-medium px-1"
-      >
+        type="text"
+        className=" flex gap-1 items-center font-medium px-1">
         <TbEdit size={20} className="text-gray-700" />
       </Button>
     </Tooltip>
@@ -92,8 +87,7 @@ export const InActiveButton = ({
         {...rest}
         color="red"
         className="text-red-500 flex items-center gap-1 font-medium px-1"
-        type="ghost"
-      >
+        type="text">
         <MdOutlineClose size={20} />
       </Button>
     </Tooltip>
@@ -112,8 +106,7 @@ export const CheckButton = ({
         {...rest}
         color="red"
         className=" flex items-center gap-1 font-medium px-1"
-        type="ghost"
-      >
+        type="text">
         <MdOutlineCheckCircleOutline className="text-success-600" size={20} />
       </Button>
     </Tooltip>
@@ -131,8 +124,7 @@ export const ConfirmButton = ({ ...rest }: ButtonProps) => {
         backgroundColor: "#039855",
         borderColor: "#039855",
         color: "#fff",
-      }}
-    >
+      }}>
       Confirm
     </Button>
   );
@@ -144,8 +136,7 @@ export const PermissionButton = ({ ...rest }) => {
       <Button
         {...rest}
         className="text-gray-700 flex items-center gap-1 font-medium px-1"
-        type="ghost"
-      >
+        type="ghost">
         <RiUserSettingsLine size={20} />
       </Button>
     </Tooltip>
