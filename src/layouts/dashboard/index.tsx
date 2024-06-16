@@ -1,5 +1,5 @@
 import ProLayout from "@ant-design/pro-layout";
-import { Button, Image } from "antd";
+import { Image } from "antd";
 import { PageHeader } from "components/page_header";
 import { useAuthContext } from "context/auth";
 import { FC } from "react";
@@ -15,8 +15,6 @@ type Props = {
 const DashboardLayout: FC<Props> = ({}) => {
   const [{ authorized, user }] = useAuthContext();
   const navigate = useNavigate();
-
-  console.log("authorized", authorized);
 
   if (!authorized) return <Navigate to={"/auth/login"} />;
 
@@ -61,7 +59,7 @@ const DashboardLayout: FC<Props> = ({}) => {
           return (
             <div className="w-full flex items-center gap-4 h-0 md:h-8 text-white font-semibold text-lg mt-0 md:mt-4 ">
               <Image
-                src="/images/logo.jpg"
+                src="/images/logo-icon.png"
                 alt="logo"
                 className="w-8 h-8 rounded-md"
                 onClick={() => navigate("/dashboard/home")}
