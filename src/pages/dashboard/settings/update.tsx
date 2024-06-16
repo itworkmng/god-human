@@ -218,7 +218,7 @@ const Update: FC<ActionComponentProps<Admin>> = ({
           <SectionContainer label="Дансны Мэдээлэл *">
             <div className="grid grid-cols-2 gap-2">
               <SectionField
-                label="Утасны дугаар *"
+                label="Дансны төрөл *"
                 children={
                   <ProFormSelect
                     initialValue={{
