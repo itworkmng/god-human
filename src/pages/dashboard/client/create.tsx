@@ -389,8 +389,8 @@ const Create: FC<ActionComponentProps<IClient>> = ({
               </div>
               <div className=" text-xs text-gray-500 mb-2">
                 <b className="text-red-500 font-bold">Анхаар</b>: Байгууллагын
-                дараах талбарт оруулсан мэдээлэл нь хэвлэмэл хуудас дээр
-                бичигдэх тул сайтар шалгаж оруулна уу
+                дээрх талбарт оруулсан мэдээлэл нь хэвлэмэл хуудас дээр бичигдэх
+                тул сайтар шалгаж оруулна уу
               </div>
             </SectionContainer>
             <Divider />
