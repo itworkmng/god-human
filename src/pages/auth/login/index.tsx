@@ -40,7 +40,7 @@ const Login: FC = () => {
       className="bg-white/30 backdrop-blur-lg rounded-xl p-10">
       <div className="text-center">
         <img
-          src="/images/logo-icon.png"
+          src="/images/logo.png"
           alt="logo"
           style={{ height: 75, borderRadius: 1000 }}
         />
