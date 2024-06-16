@@ -136,7 +136,7 @@ export const PermissionButton = ({ ...rest }) => {
       <Button
         {...rest}
         className="text-gray-700 flex items-center gap-1 font-medium px-1"
-        type="ghost">
+        type="text">
         <RiUserSettingsLine size={20} />
       </Button>
     </Tooltip>
