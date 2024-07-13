@@ -6,11 +6,5 @@
       "source": "/api/info",
       "destination": "/api/info"
     }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
   ]
 }
