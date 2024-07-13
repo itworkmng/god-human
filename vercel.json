@@ -1,5 +1,10 @@
 {
     "buildCommand": "node --max_old_space_size=4096 ./node_modules/vite/bin/vite.js build",
-    "cleanUrls": true,  
-    "rewrites": [{ "source": "/(.*)", "destination": "/" }]
-}
+    "cleanUrls": true,
+    "rewrites": [
+      {
+        "source": "/api/info",
+        "destination": "https://info.ebarimt.mn/rest/merchant"
+      }
+    ]
+  }  

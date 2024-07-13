@@ -1,9 +1,13 @@
 import axios from "axios";
 import { ICompany } from "./types";
+
 const BASE_URL =
   process.env.NODE_ENV === "production"
     ? "https://info.ebarimt.mn/rest/merchant"
     : "/api";
+
+console.log(`BASE_URL is set to: ${BASE_URL}`); // Add this line to log the BASE_URL
+
 namespace company {
   export const info = async (register: string): Promise<ICompany> => {
     try {

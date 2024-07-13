@@ -35,10 +35,10 @@ export default defineConfig({
       allow: ["."],
     },
     proxy: {
-      "/api/info": {
-        target: "https://info.ebarimt.mn", // The target API server
+      '/api/info': {
+        target: 'https://info.ebarimt.mn',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, "/rest/merchant"), // Adjust path if necessary
+        rewrite: path => path.replace(/^\/api/, '/rest/merchant'),
       },
     },
   },
