@@ -4,7 +4,8 @@ import axios from "axios";
 export default async (req: VercelRequest, res: VercelResponse) => {
   const { regno } = req.query;
 
-  console.log("Received request with regno:", regno);
+  console.log("Received request with regno:", regno); // Log the incoming request
+
   if (typeof regno !== "string") {
     res.status(400).json({ error: "Invalid request: regno must be a string" });
     return;
@@ -20,10 +21,10 @@ export default async (req: VercelRequest, res: VercelResponse) => {
         },
       }
     );
-    console.log("External API response:", response.data);
+    console.log("External API response:", response.data); // Log the API response
     res.status(200).json(response.data);
   } catch (error) {
-    console.error("Error fetching company info:", error);
+    console.error("Error fetching company info:", error); // Log the error
     res.status(500).json({ error: "Error fetching company info" });
   }
 };
