@@ -5,7 +5,7 @@ namespace company {
   export const info = async (register: string): Promise<ICompany> => {
     try {
       const response = await axios.get<ICompany>(
-        `/api/info`, // Proxy path
+        `https://info.ebarimt.mn/rest/merchant/info`, // Proxy path
         {
           params: { regno: register },
           headers: {
