@@ -3,8 +3,12 @@
   "cleanUrls": true,
   "rewrites": [
     {
-      "source": "/api/info",
-      "destination": "/api/info"
+      "source": "/(.*)",
+      "destination": "/"
+    },
+    {
+      "source": "/rest/:path*",
+      "destination": "http://info.ebarimt.mn/rest/:path*"
     }
   ]
 }

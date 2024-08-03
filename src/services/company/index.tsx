@@ -1,23 +1,12 @@
-import axios from "axios";
+// company.tsx
+import company_http from "../company-service";
 import { ICompany } from "./types";
+
 namespace company {
-  export const info = async (register: string): Promise<ICompany> => {
-    try {
-      const response = await axios.get<ICompany>(
-        `/api/info`, // Proxy path
-        {
-          params: { regno: register },
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching company info:", error);
-      throw error;
-    }
-  };
+  export const info = (register: number) =>
+    company_http.get<ICompany>(`/rest/merchant/info?regno=${register}`, {
+      hasAuth: true,
+    });
 }
 
 export default company;

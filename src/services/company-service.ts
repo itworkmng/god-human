@@ -1,6 +1,7 @@
-import { BaseResponse } from "types";
+// company-service.ts
 import axios, { AxiosRequestConfig, CancelToken } from "axios";
-const baseURL = "http://info.ebarimt.mn/rest/merchant";
+import { BaseResponse } from "types";
+const baseURL = "/";
 
 export interface IParams {
   [key: string]: string;
@@ -23,7 +24,7 @@ export interface IOption {
   onUploadProgress?: (progressEvent: any) => void;
 }
 
-namespace http {
+namespace company_http {
   export const genHeader = (headers = {}) =>
     Object.assign(headers, {}, { Locale: "mn" });
 
@@ -58,4 +59,5 @@ namespace http {
     }).then((data) => data.body);
   };
 }
-export default http;
+
+export default company_http;

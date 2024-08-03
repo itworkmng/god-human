@@ -1,19 +1,10 @@
 import { ProFormField, ProFormSwitch } from "@ant-design/pro-form";
 import { useRequest } from "ahooks";
-import {
-  Divider,
-  Flex,
-  Form,
-  Image,
-  Tabs,
-  Upload,
-  UploadProps,
-  notification,
-} from "antd";
+import { Divider, Flex, Form, Image, Tabs, Upload, UploadProps } from "antd";
 import { SectionContainer, SectionField } from "components/index";
 import { IModalForm } from "components/modal";
 import { useAuthContext } from "context/auth";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import staff from "service/client";
 import { IClient } from "service/client/type";
 import company from "service/company";
@@ -91,7 +82,8 @@ const Create: FC<ActionComponentProps<IClient>> = ({
               : tokenDecode()?.id || 0,
           });
         }}
-        onSuccess={onFinish}>
+        onSuccess={onFinish}
+      >
         <Tabs
           onChange={(key) => {
             setTab(key as "statement" | "private");
@@ -326,7 +318,8 @@ const Create: FC<ActionComponentProps<IClient>> = ({
                       maxCount={1}
                       onRemove={() => {
                         removePhoto();
-                      }}>
+                      }}
+                    >
                       {file_id == "" ? "+ Лого" : "Солих"}
                     </Upload>
                   </Flex>
