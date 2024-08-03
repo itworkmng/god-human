@@ -35,22 +35,12 @@ export default defineConfig({
       allow: ["."],
     },
     proxy: {
-      '/api/info': {
-        target: 'https://info.ebarimt.mn',
+      "/rest": {
+        target: "http://info.ebarimt.mn",
         changeOrigin: true,
-        rewrite: path => path.replace(/^\/api/, '/rest/merchant'),
+        rewrite: (path) => path.replace(/^\/rest/, "/rest"), // Adjust according to your API endpoint
       },
     },
   },
-  plugins: [
-    reactRefresh(),
-    tsconfigPaths(),
-    nodePolyfills(),
-    // VitePWA({
-    //   registerType: "autoUpdate",
-    //   devOptions: {
-    //     enabled: true,
-    //   },
-    // }),
-  ],
+  plugins: [reactRefresh(), tsconfigPaths(), nodePolyfills()],
 });
