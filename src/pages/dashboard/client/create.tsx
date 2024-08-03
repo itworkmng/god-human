@@ -43,20 +43,6 @@ const Create: FC<ActionComponentProps<IClient>> = ({
 
   const [currentRegister, setCurrentRegister] = useState("");
 
-  const fetchCompanyInfo = async () => {
-    const register = form.getFieldValue("company_register");
-    if (register.length == 7) {
-      if (currentRegister != register) {
-        try {
-          const companyData = await company.info(register);
-          form.setFieldValue("company_name", companyData.name);
-        } catch (error) {}
-      }
-    } else {
-      form.resetFields(["company_name"]);
-    }
-    setCurrentRegister(register);
-  };
   const [tab, setTab] = useState<"private" | "statement">("statement");
   return (
     <>
@@ -64,9 +50,6 @@ const Create: FC<ActionComponentProps<IClient>> = ({
         open={open}
         title="Үүсгэх"
         form={form}
-        onChange={async () => {
-          await fetchCompanyInfo();
-        }}
         autoFocusFirstInput
         modalProps={{
           destroyOnClose: true,
@@ -266,10 +249,6 @@ const Create: FC<ActionComponentProps<IClient>> = ({
                       rules={[
                         {
                           required: true,
-                          message: "Регистрээ оруулна уу",
-                        },
-                        {
-                          required: true,
                           len: 7,
                           message: "Регистрыг урт 7 байх ёстой",
                         },
@@ -277,7 +256,7 @@ const Create: FC<ActionComponentProps<IClient>> = ({
                           validator: (rule, value, callback) => {
                             const regex = /^[0-9]+$/;
                             if (!regex.test(value)) {
-                              callback("Регистрын дугаар оруулна уу");
+                              callback("Зөвхөн тоо байна");
                             } else {
                               callback();
                             }
@@ -293,8 +272,13 @@ const Create: FC<ActionComponentProps<IClient>> = ({
                   label="Нэр *"
                   children={
                     <ProFormField
-                      disabled
-                      placeholder={""}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Байгууллагын нэр оруулна уу",
+                        },
+                      ]}
+                      placeholder={"Айти Ворк ХХК"}
                       name={"company_name"}
                     />
                   }

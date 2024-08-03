@@ -50,23 +50,6 @@ const Update: FC<ActionComponentProps<IClient>> = ({
     setFileId("");
   };
 
-  const [currentRegister, setCurrentRegister] = useState("");
-
-  const fetchCompanyInfo = async () => {
-    const register = form.getFieldValue("company_register");
-    if (register.length == 7) {
-      if (currentRegister != register) {
-        try {
-          const companyData = await company.info(register);
-          form.setFieldValue("company_name", companyData.name);
-        } catch (error) {}
-      }
-    } else {
-      form.resetFields(["company_name"]);
-    }
-    setCurrentRegister(register);
-  };
-
   return (
     <>
       <IModalForm
@@ -78,9 +61,6 @@ const Update: FC<ActionComponentProps<IClient>> = ({
           destroyOnClose: true,
           onCancel: onCancel,
         }}
-        onChange={async () => {
-          await fetchCompanyInfo();
-        }}
         submitTimeout={2000}
         onRequest={async (values: IClient) => {
           await runAsync(detail?.id || 0, {
@@ -88,7 +68,8 @@ const Update: FC<ActionComponentProps<IClient>> = ({
             photo: file_id != "" ? file_id : detail?.photo || "",
           });
         }}
-        onSuccess={onFinish}>
+        onSuccess={onFinish}
+      >
         {tab == "private" && (
           <>
             <SectionContainer label="Дэлгэрэнгүй *">
@@ -145,7 +126,8 @@ const Update: FC<ActionComponentProps<IClient>> = ({
                       maxCount={1}
                       onRemove={() => {
                         removePhoto();
-                      }}>
+                      }}
+                    >
                       {file_id == "" ? "+ Лого" : "Солих"}
                     </Upload>
                   </Flex>
@@ -304,13 +286,14 @@ const Update: FC<ActionComponentProps<IClient>> = ({
                       rules={[
                         {
                           required: true,
-                          message: "Регистрээ оруулна уу",
+                          len: 7,
+                          message: "Регистрыг урт 7 байх ёстой",
                         },
                         {
                           validator: (rule, value, callback) => {
                             const regex = /^[0-9]+$/;
                             if (!regex.test(value)) {
-                              callback("Регистрын дугаар оруулна уу");
+                              callback("Зөвхөн тоо байна");
                             } else {
                               callback();
                             }
@@ -326,8 +309,13 @@ const Update: FC<ActionComponentProps<IClient>> = ({
                   label="Нэр *"
                   children={
                     <ProFormField
-                      disabled
-                      placeholder={"Ж/н: АЙТИ-ВОРК ХХК"}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Байгууллагын нэр оруулна уу",
+                        },
+                      ]}
+                      placeholder={"Айти Ворк ХХК"}
                       name={"company_name"}
                     />
                   }
@@ -352,7 +340,8 @@ const Update: FC<ActionComponentProps<IClient>> = ({
                       maxCount={1}
                       onRemove={() => {
                         removePhoto();
-                      }}>
+                      }}
+                    >
                       {file_id == "" ? "+ Лого" : "Солих"}
                     </Upload>
                   </Flex>
