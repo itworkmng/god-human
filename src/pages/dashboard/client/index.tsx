@@ -86,16 +86,16 @@ const ClientPage = () => {
           });
         }}
         UpdateComponent={Update}
-        // RemoveModelConfig={{
-        //   action: client.remove,
-        //   config: (record) => {
-        //     return {
-        //       title: "Remove",
-        //       uniqueKey: record?.id ?? 0,
-        //       display: record?.last_name + " " + record?.first_name,
-        //     };
-        //   },
-        // }}
+        RemoveModelConfig={{
+          action: client.remove,
+          config: (record) => {
+            return {
+              title: "Remove",
+              uniqueKey: record?.id ?? 0,
+              display: record?.last_name + " " + record?.first_name,
+            };
+          },
+        }}
         columns={[
           {
             width: 300,
