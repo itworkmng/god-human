@@ -11,7 +11,6 @@ import { UnlockOutlined } from "@ant-design/icons";
 import { imageUrl, tokenDecode } from "utils/index";
 import { ERROR_MESSAGE, IERROR } from "utils/typdef";
 import { useAuthContext } from "context/auth";
-import file from "service/file";
 
 const ClientPage = () => {
   const [{ user }] = useAuthContext();
@@ -87,16 +86,16 @@ const ClientPage = () => {
           });
         }}
         UpdateComponent={Update}
-        RemoveModelConfig={{
-          action: client.remove,
-          config: (record) => {
-            return {
-              title: "Remove",
-              uniqueKey: record?.id ?? 0,
-              display: record?.last_name + " " + record?.first_name,
-            };
-          },
-        }}
+        // RemoveModelConfig={{
+        //   action: client.remove,
+        //   config: (record) => {
+        //     return {
+        //       title: "Remove",
+        //       uniqueKey: record?.id ?? 0,
+        //       display: record?.last_name + " " + record?.first_name,
+        //     };
+        //   },
+        // }}
         columns={[
           {
             width: 300,
@@ -136,7 +135,8 @@ const ClientPage = () => {
               <Tag
                 bordered={false}
                 color={record.is_active ? "success" : "error"}
-                className="rounded-full border-none">
+                className="rounded-full border-none"
+              >
                 {record.is_active ? "Тийм" : "Үгүй"}
               </Tag>
             ),
