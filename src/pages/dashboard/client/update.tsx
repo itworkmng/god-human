@@ -50,6 +50,20 @@ const Update: FC<ActionComponentProps<IClient>> = ({
     setFileId("");
   };
 
+  const fetchCompanyInfo = async () => {
+    console.log(form.getFieldValue("company_register"));
+    if (form.getFieldValue("company_register").length == 7) {
+      const register = form.getFieldValue("company_register");
+      try {
+        const companyData = await company.info(register);
+        form.setFieldValue("company_name", companyData.name);
+      } catch (error) {
+        return;
+      }
+    } else {
+      form.setFieldValue("company_name", undefined);
+    }
+  };
   return (
     <>
       <IModalForm
@@ -57,6 +71,9 @@ const Update: FC<ActionComponentProps<IClient>> = ({
         title="Мэдээллийг шинэчлэх"
         form={form}
         autoFocusFirstInput
+        onChange={async (e) => {
+          await fetchCompanyInfo();
+        }}
         modalProps={{
           destroyOnClose: true,
           onCancel: onCancel,
@@ -309,13 +326,14 @@ const Update: FC<ActionComponentProps<IClient>> = ({
                   label="Нэр *"
                   children={
                     <ProFormField
+                      disabled
                       rules={[
                         {
                           required: true,
                           message: "Байгууллагын нэр оруулна уу",
                         },
                       ]}
-                      placeholder={"Айти Ворк ХХК"}
+                      placeholder={"Ж: Айти Ворк ХХК"}
                       name={"company_name"}
                     />
                   }
