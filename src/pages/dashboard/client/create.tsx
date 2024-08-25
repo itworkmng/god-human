@@ -4,7 +4,7 @@ import { Divider, Flex, Form, Image, Tabs, Upload, UploadProps } from "antd";
 import { SectionContainer, SectionField } from "components/index";
 import { IModalForm } from "components/modal";
 import { useAuthContext } from "context/auth";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import staff from "service/client";
 import { IClient } from "service/client/type";
 import company from "service/company";
@@ -33,7 +33,6 @@ const Create: FC<ActionComponentProps<IClient>> = ({
     const result = await uploadHandler(newFile.originFileObj);
     setUploading(false);
     setFileId(result?.uuid || "");
-
     form.setFieldValue("photo", result?.uuid);
   };
   const removePhoto = () => {
@@ -41,9 +40,25 @@ const Create: FC<ActionComponentProps<IClient>> = ({
     setFileId("");
   };
 
+  const [tab, setTab] = useState<"private" | "statement">("statement");
+
   const [currentRegister, setCurrentRegister] = useState("");
 
-  const [tab, setTab] = useState<"private" | "statement">("statement");
+  const fetchCompanyInfo = async () => {
+    console.log(form.getFieldValue("company_register"));
+    if (form.getFieldValue("company_register").length == 7) {
+      const register = form.getFieldValue("company_register");
+      setCurrentRegister(register);
+      try {
+        const companyData = await company.info(register);
+        form.setFieldValue("company_name", companyData.name);
+      } catch (error) {
+        return;
+      }
+    } else {
+      form.setFieldValue("company_name", undefined);
+    }
+  };
   return (
     <>
       <IModalForm
@@ -54,6 +69,9 @@ const Create: FC<ActionComponentProps<IClient>> = ({
         modalProps={{
           destroyOnClose: true,
           onCancel: onCancel,
+        }}
+        onChange={async (e) => {
+          await fetchCompanyInfo();
         }}
         submitTimeout={2000}
         onRequest={async (values: IClient) => {
@@ -272,6 +290,7 @@ const Create: FC<ActionComponentProps<IClient>> = ({
                   label="Нэр *"
                   children={
                     <ProFormField
+                      disabled
                       rules={[
                         {
                           required: true,
