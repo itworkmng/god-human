@@ -5,7 +5,7 @@ import {
   ProFormText,
 } from "@ant-design/pro-form";
 import { useRequest } from "ahooks";
-import { Divider, Form, Tabs, notification } from "antd";
+import { Divider, Form } from "antd";
 import { RenderBank, SectionContainer, SectionField } from "components/index";
 import { IModalForm } from "components/modal";
 import { BANK_ARRAY } from "config";
@@ -42,7 +42,7 @@ const Update: FC<ActionComponentProps<Admin>> = ({
           console.log(values);
           await runAsync(detail?.id || 0, {
             ...values,
-            acc_name: values.acc_name.value,
+            acc_name: values.acc_name,
           });
         }}
         onSuccess={onFinish}>

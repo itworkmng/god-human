@@ -28,13 +28,13 @@ export const ApproveButton = ({ ...rest }: ButtonProps) => {
       className="flex items-center  font-medium gap-1"
       icon={<BiCheckCircle size={20} />}
       type="primary">
-      Approve
+      Зөвшөөрөх
     </Button>
   );
 };
 export const DeleteButton = ({ ...rest }: ButtonProps) => {
   return (
-    <Tooltip title="Delete">
+    <Tooltip title="Устгах">
       <Button
         {...rest}
         color="red"
@@ -51,7 +51,7 @@ export const DetailButton = ({
   ...rest
 }: ButtonProps & { color?: string }) => {
   return (
-    <Tooltip title="Detail">
+    <Tooltip title="Дэлгэрэнгүй">
       <Button
         {...rest}
         className="flex gap-1 items-center font-medium px-1"
@@ -61,10 +61,9 @@ export const DetailButton = ({
     </Tooltip>
   );
 };
-
 export const EditButton = ({ ...rest }: ButtonProps) => {
   return (
-    <Tooltip title="Edit">
+    <Tooltip title="Засах">
       <Button
         {...rest}
         type="text"
@@ -82,7 +81,7 @@ export const InActiveButton = ({
   tooltipTitle?: string;
 }) => {
   return (
-    <Tooltip title={tooltipTitle ? tooltipTitle : "Cancel"}>
+    <Tooltip title={tooltipTitle ? tooltipTitle : "Цуцлах"}>
       <Button
         {...rest}
         color="red"
@@ -101,7 +100,7 @@ export const CheckButton = ({
   tooltipTitle?: string;
 }) => {
   return (
-    <Tooltip title={tooltipTitle ? tooltipTitle : "Approve"}>
+    <Tooltip title={tooltipTitle ? tooltipTitle : "Зөвшөөрөх"}>
       <Button
         {...rest}
         color="red"
@@ -125,14 +124,14 @@ export const ConfirmButton = ({ ...rest }: ButtonProps) => {
         borderColor: "#039855",
         color: "#fff",
       }}>
-      Confirm
+      Зөвшөөрөх
     </Button>
   );
 };
 
 export const PermissionButton = ({ ...rest }) => {
   return (
-    <Tooltip title="Permission">
+    <Tooltip title="Эрх">
       <Button
         {...rest}
         className="text-gray-700 flex items-center gap-1 font-medium px-1"

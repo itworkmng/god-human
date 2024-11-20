@@ -1,5 +1,5 @@
 import { useRequest } from "ahooks";
-import { Button, Image, Tag, notification } from "antd";
+import { Avatar, Button, Image, Tag, notification } from "antd";
 import { ITable } from "components/table";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
@@ -11,6 +11,7 @@ import { UnlockOutlined } from "@ant-design/icons";
 import { imageUrl, tokenDecode } from "utils/index";
 import { ERROR_MESSAGE, IERROR } from "utils/typdef";
 import { useAuthContext } from "context/auth";
+import ClientDetail from "./detail";
 
 const ClientPage = () => {
   const [{ user }] = useAuthContext();
@@ -86,6 +87,9 @@ const ClientPage = () => {
           });
         }}
         UpdateComponent={Update}
+        DetailComponent={ClientDetail}
+        showDetailButton
+        rowSelection={false}
         RemoveModelConfig={{
           action: client.remove,
           config: (record) => {
@@ -99,33 +103,15 @@ const ClientPage = () => {
         columns={[
           {
             width: 300,
-            dataIndex: "last_name",
-            title: "Овог",
+            dataIndex: "first_name",
+            title: "Нэр",
+            render: (_, record) => record.last_name.charAt(0)+"."+record.first_name,
+         
           },
           {
             dataIndex: "photo",
             title: "Зураг",
-            render: (_, record) => <Image src={imageUrl(record.photo)} />,
-          },
-          {
-            width: 300,
-            dataIndex: "first_name",
-            title: "Нэр",
-          },
-          {
-            width: 300,
-            dataIndex: "email",
-            title: "И-мэйл",
-          },
-          {
-            width: 300,
-            dataIndex: "phone_number",
-            title: "Утасны дугаар",
-          },
-          {
-            width: 300,
-            dataIndex: "position",
-            title: "Албан тушаал",
+            render: (_, record) => record.photo ? <Image src={imageUrl(record.photo)} />:<Avatar src={`https://placehold.co/40x40?text=${record.last_name.charAt(0)}${record.first_name.charAt(0)}`}/>,
           },
           {
             width: 300,
@@ -140,6 +126,16 @@ const ClientPage = () => {
                 {record.is_active ? "Тийм" : "Үгүй"}
               </Tag>
             ),
+          },
+          {
+            width: 300,
+            dataIndex: "company_name",
+            title: "Албан тушаал",
+          },
+          {
+            width: 300,
+            dataIndex: "phone_number",
+            title: "Утасны дугаар",
           },
           {
             width: 300,
