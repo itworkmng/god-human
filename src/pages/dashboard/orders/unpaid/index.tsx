@@ -118,9 +118,9 @@ const AllTab: FC = () => {
           },
           {
             width: 300,
-            dataIndex: "client_email",
-            title: "И-мэйл",
-            render: (_, record) => record.client.email,
+            dataIndex: "company_name",
+            title: "Байгууллагын нэр",
+            render: (_, record) => record.client.company_name,
           },
           !user?.checker_id
             ? {
