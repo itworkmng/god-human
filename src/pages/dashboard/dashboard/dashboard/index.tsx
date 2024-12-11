@@ -44,7 +44,7 @@ const DashboardSection: FC = () => {
           loading={loading}
           href="/dashboard/orders"
         />
-        {user?.role == ROLE.human && (
+        {/* {user?.role == ROLE.human && (
           <DashboardCard
             label="Нийт дүн"
             amount={data?.total_price}
@@ -52,7 +52,7 @@ const DashboardSection: FC = () => {
             loading={loading}
             isMoney
           />
-        )}
+        )} */}
       </div>
     </div>
   );
